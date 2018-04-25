@@ -18,7 +18,7 @@ class SearchPage extends Component {
 	}
 
 	renderBook(book) {
-		const authors = _.get(book, 'authors', "No Author");
+		const authors = _.get(book, 'authors[0]', "No Author");
 		const imageLink = _.get(book, 'imageLinks.thumbnail');
 		const shelf = this.hasShelf(book.id);
 		return(
@@ -36,7 +36,7 @@ class SearchPage extends Component {
 					</div>
 				</div>
 				<div className="book-title">{book.title}</div>
-				<div className="book-authors">{authors[0]}</div>
+				<div className="book-authors">{authors}</div>
 			</div>
 		)
 	}
