@@ -1,29 +1,23 @@
-import React from 'react'
+import React from 'react';
 import { Route } from 'react-router-dom';
-import * as BooksAPI from '../utils/BooksAPI'
-import '../styles/App.css'
+import * as BooksAPI from '../utils/BooksAPI';
+import '../styles/App.css';
 import MainPage from './MainPage';
 import SearchPage from './SearchPage';
 
 class BooksApp extends React.Component {
 	state = {
 		books: [],
-		searchResults: [],
-		shelf: {
-			currentlyReading: [],
-			read: [],
-			wantToRead: []
-		}
+		searchResults: []
+	}
+
+	componentDidMount() {
+		this.fetchBooks();
 	}
 
 	fetchBooks = () => {
 		BooksAPI.getAll().then(books => {
-			let shelf = {};
-			books.forEach(element => {
-				shelf[element.shelf] = shelf[element.shelf] || [];
-				shelf[element.shelf].push(element.id);
-			});
-			this.setState({books, shelf});
+			this.setState({books});
 		});
 	}
 
@@ -34,27 +28,28 @@ class BooksApp extends React.Component {
 		});
 	}
 
-	componentDidMount() {
-		this.fetchBooks();
-	}
-
 	onBookChange = (book, value) => {
-		BooksAPI.update(book, value).then(shelf => {
+		BooksAPI.update(book, value).then(() => {
 			this.setState(prevState => {
 				let index = prevState.books.findIndex(b => b.id === book.id);
-				prevState.books[index].shelf = value;
-				return { books: prevState.books }
+				/*  Splice the book from the array so we can add it to the end of the array.
+				This way the book will be in the same order as when we refresh.
+				*/
+				let newBook = prevState.books.splice(index, 1)[0];
+				newBook.shelf = value;
+				prevState.books.push(newBook);
+				return { books: prevState.books };
 			});
-		})
+		});
 	}
 
 	onBookChangeSearch = (book, value) => {
-		BooksAPI.update(book, value).then(shelf => {
+		BooksAPI.update(book, value).then(() => {
 			this.setState(prevState => {
 				let index = prevState.books.findIndex(b => b.id === book.id);
 				if(index >= 0) {
 					prevState.books[index].shelf = value;
-					return { books: prevState.books }
+					return { books: prevState.books };
 				} else {
 					book.shelf = value;
 					prevState.books.push(book);
@@ -64,26 +59,26 @@ class BooksApp extends React.Component {
 		});
 	}
 
-  render() {
-    return (
-      <div>
-		<Route exact path='/' render={() => (
-			<MainPage 
-				books={this.state.books}
-				onBookChange={this.onBookChange}
-			/>
-		)} />
-		<Route exact path='/search' render={() => (
-			<SearchPage
-				results={this.state.searchResults}
-				books={this.state.books}
-				onSearch={this.fetchSearch}
-				onBookChange={this.onBookChangeSearch}
-			/>
-		)} />
-	  </div>
-	)
-  }
+	render() {
+		return (
+			<div>
+				<Route exact path='/' render={() => (
+					<MainPage 
+						books={this.state.books}
+						onBookChange={this.onBookChange}
+					/>
+				)} />
+				<Route exact path='/search' render={() => (
+					<SearchPage
+						results={this.state.searchResults}
+						books={this.state.books}
+						onSearch={this.fetchSearch}
+						onBookChange={this.onBookChangeSearch}
+					/>
+				)} />
+			</div>
+		);
+	}
 }
 
-export default BooksApp
+export default BooksApp;

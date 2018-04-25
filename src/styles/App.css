@@ -60,6 +60,15 @@ body, .app {
   background-size: 28px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   font-size: 0;
+  transition: background 0.2s;
+}
+
+.open-search a:hover {
+	background: #8e44ad;
+	background-image: url('../icons/add.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 28px;
 }
 
 /* search page */
@@ -144,8 +153,8 @@ body, .app {
   position: absolute;
   right: 0;
   bottom: -10px;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 20%;
   background: #2980b9;
   background-image: url('../icons/arrow-drop-down.svg');
@@ -153,6 +162,15 @@ body, .app {
   background-position: center;
   background-size: 20px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  transition: background 0.2s;
+}
+
+.book-shelf-changer:hover {
+	background: #34495e;
+	background-image: url('../icons/arrow-drop-down.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 20px;
 }
 
 .book-shelf-changer select {
@@ -168,6 +186,7 @@ body, .app {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   background: #eee;
 }
+
 .book-cover-title {
   padding: 20px 10px 0;
   text-align: center;
