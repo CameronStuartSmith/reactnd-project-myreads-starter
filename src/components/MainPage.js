@@ -1,88 +1,44 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import BookShelf from './BookShelf';
 
-class MainPage extends Component {
+function filterBooks(books, term) {
+	return books.filter(book => (
+		book.shelf === term
+	));
+}
 
-	renderBook(book) {
-		return(
-			<div className="book">
-				<div className="book-top">
-					<div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.thumbnail}")` }}></div>
-					<div className="book-shelf-changer">
-						<select defaultValue={book.shelf} onChange={event => this.props.onBookChange(book, event.target.value)}>
-							<option value="default" disabled>Move to...</option>
-							<option value="currentlyReading">Currently Reading</option>
-							<option value="wantToRead">Want to Read</option>
-							<option value="read">Read</option>
-							<option value="none">None</option>
-						</select>
+const MainPage = (props) => {
+	const { books, onBookChange } = props;
+	const currentlyReading = filterBooks(books, 'currentlyReading');
+	const read = filterBooks(books, 'read');
+	const wantToRead = filterBooks(books, 'wantToRead');
+
+	return (
+		<div className="app">
+			<div className="list-books">
+				<div className="list-books-title">
+					<h1>MyReads</h1>
+				</div>
+				<div className="list-books-content">
+					<div>
+						<BookShelf books={currentlyReading} onBookChange={onBookChange}>Currently Reading</BookShelf>
+						<BookShelf books={wantToRead} onBookChange={onBookChange}>Want to Read</BookShelf>
+						<BookShelf books={read} onBookChange={onBookChange}>Read</BookShelf>
 					</div>
 				</div>
-				<div className="book-title">{book.title}</div>
-				<div className="book-authors">{book.authors[0]}</div>
+				<div className="open-search">
+					<Link to='/search' />
+				</div>
 			</div>
-		)
-	}
-
-	renderBooks(books) {
-		return books.map(book => (
-			<li key={book.id}>{this.renderBook(book)}</li>
-		))
-	}
-
-	filterBooks(term) {
-		return this.props.books.filter(book => (
-			book.shelf === term
-		));
-	}
-
-	render() {
-		const currentlyReading = this.filterBooks('currentlyReading');
-		const read = this.filterBooks('read');
-		const wantToRead = this.filterBooks('wantToRead');
-
-		return (
-			<div className="app">
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                     {this.renderBooks(currentlyReading)}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {this.renderBooks(wantToRead)}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {this.renderBooks(read)}
-                    </ol>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="open-search">
-              <Link to='/search' />
-            </div>
-          </div>
-        )}
-      </div>
-		);
-	}
+		</div>
+	);
 }
+
+MainPage.propTypes = {
+	books: PropTypes.array.isRequired,
+	onBookChange: PropTypes.func.isRequired
+};
 
 export default MainPage;
