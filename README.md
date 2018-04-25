@@ -13,7 +13,7 @@ To get started developing right away:
 
 ## Udacity
 
-This project was created for a udacity course using their starter repo for the repository. [Template](https://github.com/udacity/reactnd-project-myreads-starter)
+This project was created for a udacity course using their starter repository. [Template](https://github.com/udacity/reactnd-project-myreads-starter)
 
 ## Create React App
 
