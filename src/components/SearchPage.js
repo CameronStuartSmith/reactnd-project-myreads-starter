@@ -30,6 +30,10 @@ class SearchPage extends Component {
 	}
 
 	render() {
+		// Extra check to make sure to only render results if their is a query.
+		// Sometimes the last fetch promise returns after a user has cleared out the query and then it returns results.
+		// This prevents that bug from happening.
+		const books = this.state.query ? this.props.results : [];
 		return (
 			<div className="search-books">
 				<div className="search-books-bar">
@@ -40,7 +44,7 @@ class SearchPage extends Component {
 				</div>
 				<div className="search-books-results">
 					<ol className="books-grid">
-						{this.renderBooks(this.props.results)}
+						{this.renderBooks(books)}
 					</ol>
 				</div>
 			</div>
